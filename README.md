@@ -2,7 +2,9 @@
 - 接口使用Blibili客户端，如有侵权请私信删除
 ---
 # 界面预览
-![image](https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img1.png =100x20)
+
+ <img src="https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img1.png" width = "300" height = "200" alt="1" align=center />
+![image](https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img1.png)
 ![image](https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img2.png)
 ![image](https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img3.png)
 ![image](https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img4.png)
