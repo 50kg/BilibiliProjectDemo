@@ -3,7 +3,7 @@
 ---
 # 界面预览
 
- <img src="https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img1.png" width = "300" height = "200" alt="1" align=center />
+ <img src="https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img1.png" width = "600" height = "800" alt="1" align=center />
 ![image](https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img1.png)
 ![image](https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img2.png)
 ![image](https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img3.png)
