@@ -16,7 +16,7 @@
 - 等等...
 # 界面预览
 
- <img src="https://github.com/50kg/BilibiliProjectDemo/blob/master/images/gif1.gif" style="zoom:10%"/>
+ <img src="https://github.com/50kg/BilibiliProjectDemo/blob/master/images/gif1.gif" width = "297" height = "482"/>
  <img src="https://github.com/50kg/BilibiliProjectDemo/blob/master/images/gif2.gif" width = "297" height = "482" />
  <img src="https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img1.png" width = "297" height = "482" />
  <img src="https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img2.png" width = "297" height = "482" />
