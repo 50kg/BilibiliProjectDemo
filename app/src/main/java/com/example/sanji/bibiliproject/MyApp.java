@@ -19,7 +19,7 @@ public class MyApp extends Application {
 
     //屏幕高度
     public static int heightPixels;
-    //全局context
+    //全局context1
     private static Context context;
 
     @Override
@@ -42,6 +42,7 @@ public class MyApp extends Application {
 
     }
 
+    //全局Content
     public static Context getContext() {
         return context;
     }

@@ -8,9 +8,9 @@ public class BaseUrl {
     //http://live.bilibili.com/AppNewIndex/common?_device=android&platform=android&scale=xxhdpi
     public static final String BASE_URL_LIVE = "http://live.bilibili.com/";
 
-    //    http://app.bilibili.com/x/v2/show?build=434000&platform=android
+    //http://app.bilibili.com/x/v2/show?build=434000&platform=android
     public static final String BASE_URL_RECOMMEND = "http://app.bilibili.com/";
 
-//    http://api.m.panda.tv/index.php?method=category.list&type=game
-    public static final String BASE_URL_PANDER_GAME="http://api.m.panda.tv/";
+    //http://api.m.panda.tv/index.php?method=category.list&type=game
+    public static final String BASE_URL_PANDER_GAME = "http://api.m.panda.tv/";
 }
