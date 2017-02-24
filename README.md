@@ -12,8 +12,11 @@
 - 使用广播进行WIFI/数据判断进行本地缓存策略
 - 图片使用Glide图片加载器完成
 - 直播库播放使用ijkPlaye，弹幕使DanmakuFlameMaster开源库，可实现在线观看直播，实时发送弹幕，重力感应切换方向，锁定屏幕，截图，设置屏幕比例等
+- 自定义View圆形头像
 - 使用Butterknife插件实现快速init
-- 等等...
+- 等其他技术
+
+
 # 界面预览
 
  <img src="https://github.com/50kg/BilibiliProjectDemo/blob/master/images/gif1.gif" width = "297" height = "482"/>
