@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.youth.banner.Banner xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/banner"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:indicator_drawable_selected="@drawable/shape_banner_indicat_select"
+    app:indicator_height="6dp"
+    app:indicator_width="6dp" />

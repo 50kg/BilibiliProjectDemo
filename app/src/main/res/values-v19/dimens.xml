@@ -1,0 +1,6 @@
+<resources>
+
+    <dimen name="toolbar_padding_top">25dp</dimen>
+
+    <dimen name="coordinatorLayout_padding_top">-25dp</dimen>
+</resources>

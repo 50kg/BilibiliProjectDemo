@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FA7199</color>
+    <color name="colorPrimaryDark">#FA7199</color>
+    <color name="colorAccent">#FA7199</color>
+    <color name="TabLayoutDefault">#F5C6D1</color>
+    <color name="RecyclerBackground">#eaeaea</color>
+    <color name="colorWhite">#FFFFFF</color>
+</resources>

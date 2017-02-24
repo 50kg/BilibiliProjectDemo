@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">BibiliProject</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="indexTabLayout">
+        <item>直播</item>
+        <item>推荐</item>
+        <item>追番</item>
+        <item>游戏</item>
+        <item>关注</item>
+        <item>发现</item>
+    </string-array>
+
+    <string-array name="livePlayerTabLayout">
+        <item>简介</item>
+        <item>评论</item>
+    </string-array>
+    <string name="title_activity_main2">Main2Activity</string>
+</resources>

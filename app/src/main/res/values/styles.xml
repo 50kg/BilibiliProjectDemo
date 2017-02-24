@@ -1,0 +1,42 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <color name="recoveryColorPrimary">@color/colorPrimary</color>
+    <color name="recoveryColorPrimaryDark">@color/colorPrimary</color>
+    <color name="recoveryColorAccent">#BDBDBD</color>
+    <color name="recoveryTextColor">#FFFFFF</color>
+
+    <!--适配状态栏-->
+    <style name="AppTheme.NoActionBar"></style>
+
+    <!--ToolBar主题-->
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <!--AppBarLayout主题-->
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!--TabLyout主题-->
+    <style name="MyIndexTabLayout" parent="Widget.Design.TabLayout">
+        <!--下划线的样式-->
+        <item name="tabIndicatorColor">@android:color/white</item>
+        <item name="tabSelectedTextColor">@android:color/white</item>
+        <item name="tabTextAppearance">@style/MyCustomTextAppearance</item>
+        <item name="tabBackground">@color/colorPrimary</item>
+        <item name="tabTextColor">@color/TabLayoutDefault</item>
+    </style>
+
+    <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>
