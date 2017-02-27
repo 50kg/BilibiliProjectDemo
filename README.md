@@ -26,7 +26,8 @@
  <img src="https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img3.png" width = "297" height = "482" />
  <img src="https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img6.png" width = "297" height = "482" />
  <img src="https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img7.png" width = "297" height = "482" />
- <img src="https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img4.png" width = "482" height = "297" />
- <img src="https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img5.png" width = "482" height = "297" />
+
+ <img src="https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img4.png" width = "582" height = "397" />
+ <img src="https://github.com/50kg/BilibiliProjectDemo/blob/master/images/img5.png" width = "582" height = "397" />
 # 致谢
 感谢您花时间阅读我的Project，如果对你有所帮助，期待你的Start
