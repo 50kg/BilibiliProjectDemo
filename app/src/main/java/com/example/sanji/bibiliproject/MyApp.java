@@ -22,6 +22,8 @@ public class MyApp extends Application {
     //全局context1
     private static Context context;
 
+    private static String test1;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -46,4 +48,6 @@ public class MyApp extends Application {
     public static Context getContext() {
         return context;
     }
+
+
 }
