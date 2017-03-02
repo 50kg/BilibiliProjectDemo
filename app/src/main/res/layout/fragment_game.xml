@@ -5,7 +5,6 @@
     android:orientation="vertical"
     android:background="@color/RecyclerBackground"
     tools:context=".ui.PandaGameFragment">
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/pander_gmme_swipe"
         android:layout_width="match_parent"

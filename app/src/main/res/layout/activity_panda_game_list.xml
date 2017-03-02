@@ -4,13 +4,17 @@
     android:id="@+id/activity_pander_game_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/RecyclerBackground"
     android:orientation="vertical"
     tools:context="com.example.sanji.bibiliproject.ui.PandaGameListActivity">
+
+    <include layout="@layout/include_toolbar" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/game_list_swipe"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/game_list_recyclerview"
             android:layout_width="match_parent"

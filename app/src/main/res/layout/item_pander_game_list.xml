@@ -40,7 +40,7 @@
 
         <TextView
             android:id="@+id/pander_game_list_tv_name"
-            android:layout_width="match_parent"
+            android:layout_width="330dp"
             android:layout_height="wrap_content"
             android:text="用户名"
             android:textColor="@android:color/black" />

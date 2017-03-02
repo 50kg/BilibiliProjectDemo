@@ -30,13 +30,13 @@ public class MyApp extends Application {
         this.context = getApplicationContext();
 
         //恢复模式
-        Recovery.getInstance()
-                .debug(true)
-                .recoverInBackground(false)//当应用在后台时发生Crash，是否需要进行恢复
-                .recoverStack(true)//是否恢复整个Activity Stack，否则将恢复栈顶Activity
-                .mainPage(MainActivity.class)//回退的界面
-                .silent(false, Recovery.SilentMode.RECOVER_ACTIVITY_STACK)//是否静默恢复
-                .init(this);
+//        Recovery.getInstance()
+//                .debug(true)
+//                .recoverInBackground(false)//当应用在后台时发生Crash，是否需要进行恢复
+//                .recoverStack(true)//是否恢复整个Activity Stack，否则将恢复栈顶Activity
+//                .mainPage(MainActivity.class)//回退的界面
+//                .silent(false, Recovery.SilentMode.RECOVER_ACTIVITY_STACK)//是否静默恢复
+//                .init(this);
 
         //滑动返回 必须在 Application 的 onCreate 方法中执行 BGASwipeBackManager.getInstance().init(this) 来初始化滑动返回
         BGASwipeBackManager.getInstance().init(this);

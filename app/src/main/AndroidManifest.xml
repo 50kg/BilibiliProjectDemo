@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 判断网络状态 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--恢复模式-->
     <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
@@ -28,15 +29,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.WebViewActivity" />
+        <activity
+            android:name=".ui.WebViewActivity"
+            android:theme="@style/AppTheme.Transparent" />
         <activity
             android:name=".ui.PlayerInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Transparent" />
         <activity
             android:name=".ui.IjkPlayerActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"></activity>
-        <activity android:name=".ui.PandaGameListActivity"></activity>
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name=".ui.PandaGameListActivity"
+            android:theme="@style/AppTheme.Transparent" />
     </application>
 
 </manifest>

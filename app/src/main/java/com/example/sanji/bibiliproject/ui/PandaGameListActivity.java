@@ -31,8 +31,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PandaGameListActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    @InjectView(R.id.toolbar)
-    Toolbar toolbar;
+    @InjectView(R.id.include_toolbar)
+    Toolbar include_toolbar;
     @InjectView(R.id.game_list_recyclerview)
     RecyclerView recyclerview;
     @InjectView(R.id.game_list_swipe)
@@ -40,9 +40,6 @@ public class PandaGameListActivity extends BaseActivity implements SwipeRefreshL
     private PandaGameBean.DataBean data;
     private List<PandaGameListBean.DataBean.ItemsBean> items;
     private boolean loadMoreFalg = true;
-
-
-    private static final String TAG = "PandaGameListActivity";
 
     //当前页
     private int page = 1;
@@ -55,8 +52,9 @@ public class PandaGameListActivity extends BaseActivity implements SwipeRefreshL
         setContentView(R.layout.activity_panda_game_list);
         ButterKnife.inject(this);
         data = (PandaGameBean.DataBean) getIntent().getSerializableExtra("data");
-        toolbar.setTitle(data.getCname());
 
+        setSupportActionBar(include_toolbar);
+        getSupportActionBar().setTitle(data.getCname());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);//设置返回键可用
         initSwipe();
         initData();
@@ -64,6 +62,9 @@ public class PandaGameListActivity extends BaseActivity implements SwipeRefreshL
 
     }
 
+    /**
+     * 分页加载写的不好，请勿效仿，后期会修改
+     */
     private void initData() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BaseUrl.BASE_URL_PANDA_GAME)
@@ -131,7 +132,6 @@ public class PandaGameListActivity extends BaseActivity implements SwipeRefreshL
                     });
 
 
-
                     //全部执行完毕后关闭刷新动画
                     swipe.setRefreshing(false);
                 }
@@ -184,20 +184,6 @@ public class PandaGameListActivity extends BaseActivity implements SwipeRefreshL
         });
     }
 
-    /**
-     * 左上角返回监听
-     *
-     * @param item
-     * @return
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onRefresh() {

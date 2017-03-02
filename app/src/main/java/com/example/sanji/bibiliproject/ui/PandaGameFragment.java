@@ -96,6 +96,8 @@ public class PandaGameFragment extends Fragment implements SwipeRefreshLayout.On
                 adapter.setOnItemClickListener(new PandaGameAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+
+                        
                         Intent intent = new Intent(getContext(), PandaGameListActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("data", data.get(position));

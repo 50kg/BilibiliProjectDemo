@@ -27,14 +27,14 @@ import com.example.sanji.bibiliproject.bean.LiveContnetBean;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class PlayerInfoActivity extends AppCompatActivity {
+public class PlayerInfoActivity extends BaseActivity {
 
     @InjectView(R.id.playButton)
     ButtonBarLayout playButton;
     @InjectView(R.id.toolbar_layout)
     CollapsingToolbarLayout collapsingToolbarLayout;
     @InjectView(R.id.toolbar_play)
-    Toolbar toolbar;
+    Toolbar toolbar_play;
     @InjectView(R.id.app_bar)
     AppBarLayout appBar;
     @InjectView(R.id.player_fragment)
@@ -90,8 +90,8 @@ public class PlayerInfoActivity extends AppCompatActivity {
     }
 
     private void initState() {
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
+        toolbar_play.setTitle("");
+        setSupportActionBar(toolbar_play);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);//设置返回键可用
 
@@ -110,12 +110,10 @@ public class PlayerInfoActivity extends AppCompatActivity {
                         state = CollapsingToolbarLayoutState.EXPANDED;//修改状态标记为展开
 //                        collapsingToolbarLayout.setTitle("展开");//设置title为EXPANDED
 
-//                        String contentName = intent.getStringExtra("contentName");
-//                        toolbar.setTitle(contentName + "的直播间");
                     }
                 } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
                     if (state != CollapsingToolbarLayoutState.COLLAPSED) {
-                        toolbar.setTitle("");//设置title不显示
+                        toolbar_play.setTitle("");//设置title不显示
                         playButton.setVisibility(View.VISIBLE);//隐藏播放按钮
                         state = CollapsingToolbarLayoutState.COLLAPSED;//修改状态标记为折叠
 
@@ -176,21 +174,6 @@ public class PlayerInfoActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-    /**
-     * 左上角返回监听
-     *
-     * @param item
-     * @return
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }
 
 

@@ -25,11 +25,11 @@ import com.orhanobut.logger.Logger;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    @InjectView(R.id.toolbar)
-    Toolbar toolbar;
+    @InjectView(R.id.main_toolbar)
+    Toolbar main_toolbar;
     @InjectView(R.id.nav_view)
     NavigationView navigationView;
     @InjectView(R.id.drawer_layout)
@@ -48,22 +48,16 @@ public class MainActivity extends AppCompatActivity
     CoordinatorLayout coorLayout;
     private ImageView yejian;
     private IndexFragment indexFragment;
-//    private ActionBarDrawerToggle mToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
+        main_toolbar.setTitle("");
+        setSupportActionBar(main_toolbar);
         //去除滚动条
         disableNavigationViewScrollbars(navigationView);
-
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);//侧滑的点击事件
         layoutDrawer.setOnClickListener(this);//打开抽屉
@@ -90,10 +84,10 @@ public class MainActivity extends AppCompatActivity
      * 主界面不需要支持滑动返回，重写该方法永久禁用当前界面的滑动返回功能
      * @return
      */
-//    @Override
-//    public boolean isSupportSwipeBack() {
-//        return false;
-//    }
+    @Override
+    public boolean isSupportSwipeBack() {
+        return false;
+    }
 
 
     private void initIndexFragment() {
