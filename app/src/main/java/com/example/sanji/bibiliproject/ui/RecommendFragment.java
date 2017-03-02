@@ -20,6 +20,7 @@ import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 import com.youth.banner.listener.OnBannerClickListener;
+import com.youth.banner.listener.OnBannerListener;
 
 import org.json.JSONException;
 
@@ -37,7 +38,7 @@ import retrofit2.Retrofit;
 /**
  * 推荐Fragment
  */
-public class RecommendFragment extends Fragment implements OnBannerClickListener {
+public class RecommendFragment extends Fragment implements OnBannerListener {
 
 
     private static final String TAG = "RecommendFragment";
@@ -123,7 +124,7 @@ public class RecommendFragment extends Fragment implements OnBannerClickListener
                 .setIndicatorGravity(BannerConfig.RIGHT)
                 .setBannerAnimation(Transformer.DepthPage)
                 .start();
-        banner.setOnBannerClickListener(this);
+        banner.setOnBannerListener(this);
     }
 
     @Override

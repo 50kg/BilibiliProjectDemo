@@ -31,11 +31,12 @@
         <activity android:name=".ui.WebViewActivity" />
         <activity
             android:name=".ui.PlayerInfoActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Transparent" />
         <activity
             android:name=".ui.IjkPlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"></activity>
-        <activity android:name=".ui.PanderGameListActivity"></activity>
+        <activity android:name=".ui.PandaGameListActivity"></activity>
     </application>
 
 </manifest>

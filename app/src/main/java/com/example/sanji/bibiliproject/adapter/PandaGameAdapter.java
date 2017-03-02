@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.sanji.bibiliproject.R;
-import com.example.sanji.bibiliproject.bean.PanderGameBean;
+import com.example.sanji.bibiliproject.bean.PandaGameBean;
 
 import org.byteam.superadapter.SuperAdapter;
 import org.byteam.superadapter.SuperViewHolder;
@@ -18,13 +18,13 @@ import java.util.List;
  * Created by sanji on 2017/2/21.
  */
 
-public class PanderGameAdapter extends SuperAdapter<PanderGameBean.DataBean> {
-    public PanderGameAdapter(Context context, List<PanderGameBean.DataBean> items, int layoutResId) {
+public class PandaGameAdapter extends SuperAdapter<PandaGameBean.DataBean> {
+    public PandaGameAdapter(Context context, List<PandaGameBean.DataBean> items, int layoutResId) {
         super(context, items, layoutResId);
     }
 
     @Override
-    public void onBind(final SuperViewHolder holder, int viewType, final int layoutPosition, PanderGameBean.DataBean item) {
+    public void onBind(final SuperViewHolder holder, int viewType, final int layoutPosition, PandaGameBean.DataBean item) {
         holder.setText(R.id.pander_gmme_tv,item.getCname());
 
         Glide.with(mContext).load(item.getImg())

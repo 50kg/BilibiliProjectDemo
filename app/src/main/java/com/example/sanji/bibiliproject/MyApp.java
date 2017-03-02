@@ -7,9 +7,7 @@ import android.util.DisplayMetrics;
 import com.example.sanji.bibiliproject.ui.MainActivity;
 import com.zxy.recovery.core.Recovery;
 
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.OkHttpClient;
+import cn.bingoogolapple.swipebacklayout.BGASwipeBackManager;
 
 /**
  * Created by sanji on 2017/1/31.
@@ -21,8 +19,6 @@ public class MyApp extends Application {
     public static int heightPixels;
     //全局context1
     private static Context context;
-
-    private static String test1;
 
     @Override
     public void onCreate() {
@@ -41,6 +37,9 @@ public class MyApp extends Application {
                 .mainPage(MainActivity.class)//回退的界面
                 .silent(false, Recovery.SilentMode.RECOVER_ACTIVITY_STACK)//是否静默恢复
                 .init(this);
+
+        //滑动返回 必须在 Application 的 onCreate 方法中执行 BGASwipeBackManager.getInstance().init(this) 来初始化滑动返回
+        BGASwipeBackManager.getInstance().init(this);
 
     }
 

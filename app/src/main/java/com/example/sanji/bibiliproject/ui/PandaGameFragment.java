@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.sanji.bibiliproject.R;
-import com.example.sanji.bibiliproject.adapter.PanderGameAdapter;
-import com.example.sanji.bibiliproject.bean.PanderGameBean;
+import com.example.sanji.bibiliproject.adapter.PandaGameAdapter;
+import com.example.sanji.bibiliproject.bean.PandaGameBean;
 import com.example.sanji.bibiliproject.network.BaseUrl;
 import com.example.sanji.bibiliproject.network.IRetrofitClient;
 
@@ -31,14 +31,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PanderGameFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class PandaGameFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
 
     @InjectView(R.id.game_recyclerview)
     RecyclerView recyclerview;
     private SwipeRefreshLayout swipe;
 
-    public PanderGameFragment() {
+    public PandaGameFragment() {
         // Required empty public constructor
     }
 
@@ -73,30 +73,30 @@ public class PanderGameFragment extends Fragment implements SwipeRefreshLayout.O
 
     private void initData() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BaseUrl.BASE_URL_PANDER_GAME)
+                .baseUrl(BaseUrl.BASE_URL_PANDA_GAME)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         IRetrofitClient retrofitClient = retrofit.create(IRetrofitClient.class);
 
         //参数
-        Call<PanderGameBean> call = retrofitClient.getPaderGame("category.list", "game");
-        call.enqueue(new Callback<PanderGameBean>() {
+        Call<PandaGameBean> call = retrofitClient.getPaderGame("category.list", "game");
+        call.enqueue(new Callback<PandaGameBean>() {
             @Override
-            public void onResponse(Call<PanderGameBean> call, Response<PanderGameBean> response) {
+            public void onResponse(Call<PandaGameBean> call, Response<PandaGameBean> response) {
 
-                final List<PanderGameBean.DataBean> data = response.body().getData();
+                final List<PandaGameBean.DataBean> data = response.body().getData();
 
                 recyclerview.setLayoutManager(new GridLayoutManager(getContext(), 3));
-                PanderGameAdapter adapter = new PanderGameAdapter(getContext(), data, R.layout.item_pander_game);
+                PandaGameAdapter adapter = new PandaGameAdapter(getContext(), data, R.layout.item_pander_game);
                 recyclerview.setAdapter(adapter);
 
                 /**
                  * 单击事件接口回调
                  */
-                adapter.setOnItemClickListener(new PanderGameAdapter.OnItemClickListener() {
+                adapter.setOnItemClickListener(new PandaGameAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(getContext(), PanderGameListActivity.class);
+                        Intent intent = new Intent(getContext(), PandaGameListActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("data", data.get(position));
                         intent.putExtras(bundle);
@@ -109,7 +109,7 @@ public class PanderGameFragment extends Fragment implements SwipeRefreshLayout.O
             }
 
             @Override
-            public void onFailure(Call<PanderGameBean> call, Throwable t) {
+            public void onFailure(Call<PandaGameBean> call, Throwable t) {
                 Toast.makeText(getContext(), "数据获取失败！", Toast.LENGTH_SHORT).show();
             }
         });

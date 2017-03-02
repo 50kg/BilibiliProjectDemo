@@ -14,7 +14,7 @@ public class BaseUrl {
     public static final String BASE_URL_RECOMMEND = "http://app.bilibili.com/";
 
     //http://api.m.panda.tv/index.php?method=category.list&type=game
-    public static final String BASE_URL_PANDER_GAME = "http://api.m.panda.tv/";
+    public static final String BASE_URL_PANDA_GAME = "http://api.m.panda.tv/";
 
 
 

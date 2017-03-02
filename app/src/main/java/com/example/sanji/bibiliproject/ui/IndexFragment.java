@@ -61,7 +61,7 @@ public class IndexFragment extends Fragment {
         fragmentList.add(new LiveFragment());
         fragmentList.add(new RecommendFragment());
         fragmentList.add(new ZhuiFanFragment());
-        fragmentList.add(new PanderGameFragment());
+        fragmentList.add(new PandaGameFragment());
         fragmentList.add(new GuanZhuFragment());
         fragmentList.add(new FaXianFragment());
     }

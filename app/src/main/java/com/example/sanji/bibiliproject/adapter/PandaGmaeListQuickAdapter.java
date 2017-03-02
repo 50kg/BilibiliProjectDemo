@@ -5,29 +5,26 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.sanji.bibiliproject.R;
-import com.example.sanji.bibiliproject.bean.PanderGameListBean;
+import com.example.sanji.bibiliproject.bean.PandaGameListBean;
 import com.example.sanji.bibiliproject.utils.NumberUtil;
 
 import java.util.List;
-
-import retrofit2.Callback;
 
 /**
  * Created by sanji on 2017/2/21.
  */
 
-public class PanderGmaeListQuickAdapter extends BaseItemDraggableAdapter<PanderGameListBean.DataBean.ItemsBean, BaseViewHolder> {
+public class PandaGmaeListQuickAdapter extends BaseItemDraggableAdapter<PandaGameListBean.DataBean.ItemsBean, BaseViewHolder> {
 
 
-    public PanderGmaeListQuickAdapter(int layoutResId, List<PanderGameListBean.DataBean.ItemsBean> data) {
+    public PandaGmaeListQuickAdapter(int layoutResId, List<PandaGameListBean.DataBean.ItemsBean> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, PanderGameListBean.DataBean.ItemsBean item) {
+    protected void convert(BaseViewHolder holder, PandaGameListBean.DataBean.ItemsBean item) {
         holder.setText(R.id.pander_game_list_tv, item.getName());
         Glide.with(mContext).load(item.getPictures().getImg())
                 .crossFade()//淡入

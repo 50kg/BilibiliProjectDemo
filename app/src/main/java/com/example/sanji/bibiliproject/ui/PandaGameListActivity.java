@@ -1,29 +1,21 @@
 package com.example.sanji.bibiliproject.ui;
 
-import android.content.Intent;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
-import com.chad.library.adapter.base.listener.OnItemDragListener;
-import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.example.sanji.bibiliproject.R;
-import com.example.sanji.bibiliproject.adapter.PanderGameAdapter;
-import com.example.sanji.bibiliproject.adapter.PanderGmaeListQuickAdapter;
-import com.example.sanji.bibiliproject.bean.PanderGameBean;
-import com.example.sanji.bibiliproject.bean.PanderGameListBean;
+import com.example.sanji.bibiliproject.adapter.PandaGmaeListQuickAdapter;
+import com.example.sanji.bibiliproject.bean.PandaGameBean;
+import com.example.sanji.bibiliproject.bean.PandaGameListBean;
 import com.example.sanji.bibiliproject.network.BaseUrl;
 import com.example.sanji.bibiliproject.network.IRetrofitClient;
 
@@ -37,7 +29,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class PanderGameListActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class PandaGameListActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
@@ -45,12 +37,12 @@ public class PanderGameListActivity extends BaseActivity implements SwipeRefresh
     RecyclerView recyclerview;
     @InjectView(R.id.game_list_swipe)
     SwipeRefreshLayout swipe;
-    private PanderGameBean.DataBean data;
-    private List<PanderGameListBean.DataBean.ItemsBean> items;
+    private PandaGameBean.DataBean data;
+    private List<PandaGameListBean.DataBean.ItemsBean> items;
     private boolean loadMoreFalg = true;
 
 
-    private static final String TAG = "PanderGameListActivity";
+    private static final String TAG = "PandaGameListActivity";
 
     //当前页
     private int page = 1;
@@ -60,9 +52,9 @@ public class PanderGameListActivity extends BaseActivity implements SwipeRefresh
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pander_game_list);
+        setContentView(R.layout.activity_panda_game_list);
         ButterKnife.inject(this);
-        data = (PanderGameBean.DataBean) getIntent().getSerializableExtra("data");
+        data = (PandaGameBean.DataBean) getIntent().getSerializableExtra("data");
         toolbar.setTitle(data.getCname());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);//设置返回键可用
@@ -74,19 +66,19 @@ public class PanderGameListActivity extends BaseActivity implements SwipeRefresh
 
     private void initData() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BaseUrl.BASE_URL_PANDER_GAME)
+                .baseUrl(BaseUrl.BASE_URL_PANDA_GAME)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         IRetrofitClient retrofitClient = retrofit.create(IRetrofitClient.class);
 
         //参数
-        Call<PanderGameListBean> call = retrofitClient.getPaderGameList(data.getEname(), page, 10);
-        call.enqueue(new Callback<PanderGameListBean>() {
+        Call<PandaGameListBean> call = retrofitClient.getPadaGameList(data.getEname(), page, 10);
+        call.enqueue(new Callback<PandaGameListBean>() {
             @Override
-            public void onResponse(Call<PanderGameListBean> call, Response<PanderGameListBean> response) {
+            public void onResponse(Call<PandaGameListBean> call, Response<PandaGameListBean> response) {
 
                 if (response.isSuccessful()) {
-                    PanderGameListBean.DataBean data = response.body().getData();
+                    PandaGameListBean.DataBean data = response.body().getData();
                     items = data.getItems();
                     total = Integer.valueOf(data.getTotal());
                     if (total % 10 != 0) {
@@ -94,7 +86,7 @@ public class PanderGameListActivity extends BaseActivity implements SwipeRefresh
                     } else {
                         total = total / 10;
                     }
-                    final PanderGmaeListQuickAdapter adapter = new PanderGmaeListQuickAdapter(R.layout.item_pander_game_list, items);
+                    final PandaGmaeListQuickAdapter adapter = new PandaGmaeListQuickAdapter(R.layout.item_pander_game_list, items);
                     recyclerview.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
                     recyclerview.setAdapter(adapter);
                     //动画
@@ -133,7 +125,7 @@ public class PanderGameListActivity extends BaseActivity implements SwipeRefresh
                     recyclerview.addOnItemTouchListener(new OnItemChildClickListener() {
                         @Override
                         public void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-//                            Toast.makeText(PanderGameListActivity.this, position+"", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(PandaGameListActivity.this, position+"", Toast.LENGTH_SHORT).show();
 //                            Toast.makeText(getApplicationContext(), "你点击了" + items.get(position).getName(), Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -146,7 +138,7 @@ public class PanderGameListActivity extends BaseActivity implements SwipeRefresh
             }
 
             @Override
-            public void onFailure(Call<PanderGameListBean> call, Throwable t) {
+            public void onFailure(Call<PandaGameListBean> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "数据获取失败！", Toast.LENGTH_SHORT).show();
             }
         });
@@ -154,25 +146,25 @@ public class PanderGameListActivity extends BaseActivity implements SwipeRefresh
 
     public void getMoreData() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BaseUrl.BASE_URL_PANDER_GAME)
+                .baseUrl(BaseUrl.BASE_URL_PANDA_GAME)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         IRetrofitClient retrofitClient = retrofit.create(IRetrofitClient.class);
 
         //参数
-        Call<PanderGameListBean> call = retrofitClient.getPaderGameList(data.getEname(), page, 10);
-        call.enqueue(new Callback<PanderGameListBean>() {
+        Call<PandaGameListBean> call = retrofitClient.getPadaGameList(data.getEname(), page, 10);
+        call.enqueue(new Callback<PandaGameListBean>() {
             @Override
-            public void onResponse(Call<PanderGameListBean> call, Response<PanderGameListBean> response) {
+            public void onResponse(Call<PandaGameListBean> call, Response<PandaGameListBean> response) {
                 if (response.isSuccessful()) {
                     loadMoreFalg = true;
-                    PanderGameListBean.DataBean data = response.body().getData();
+                    PandaGameListBean.DataBean data = response.body().getData();
                     items = data.getItems();
                 }
             }
 
             @Override
-            public void onFailure(Call<PanderGameListBean> call, Throwable t) {
+            public void onFailure(Call<PandaGameListBean> call, Throwable t) {
                 loadMoreFalg = false;
             }
         });

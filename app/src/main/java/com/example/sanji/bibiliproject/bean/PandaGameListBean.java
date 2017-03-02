@@ -6,7 +6,7 @@ import java.util.List;
  * Created by sanji on 2017/2/21.
  */
 
-public class PanderGameListBean {
+public class PandaGameListBean {
 
     /**
      * errno : 0

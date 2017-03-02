@@ -2,6 +2,7 @@ package com.example.sanji.bibiliproject.ui;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -25,10 +26,14 @@ import com.example.sanji.bibiliproject.network.BaseUrl;
 import com.example.sanji.bibiliproject.network.IRetrofitClient;
 import com.example.sanji.bibiliproject.utils.DataBeanToJsonUtil;
 import com.example.sanji.bibiliproject.utils.BannerLiveLoader;
+import com.orhanobut.logger.LogAdapter;
+import com.orhanobut.logger.LogLevel;
+import com.orhanobut.logger.Logger;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 import com.youth.banner.listener.OnBannerClickListener;
+import com.youth.banner.listener.OnBannerListener;
 
 import org.json.JSONException;
 
@@ -46,7 +51,7 @@ import retrofit2.Retrofit;
 /**
  * 直播Fragment
  */
-public class LiveFragment extends Fragment implements OnBannerClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class LiveFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, OnBannerListener {
 
     private static final String TAG = "LiveFragment";
     @InjectView(R.id.recyclerView)
@@ -121,13 +126,13 @@ public class LiveFragment extends Fragment implements OnBannerClickListener, Swi
                 if (response.isSuccessful()) {
                     try {
                         String jsonString = response.body().string();
-                        Log.d(TAG, "onResponse: " + jsonString);
+                        Logger.json(jsonString);
                         //解析数据到
                         beannerList = DataBeanToJsonUtil.getLiveBannerBeanData(jsonString);
                         title_contentList = DataBeanToJsonUtil.getLiveTitleAndContentBeanData(jsonString);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        Log.d(TAG, "onResponse: 解析错误");
+                        Logger.e("解析错误");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -147,9 +152,13 @@ public class LiveFragment extends Fragment implements OnBannerClickListener, Swi
                         }
                     });
 
+
                     //动画
                     adapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
-//                    adapter.isFirstOnly(false);
+                    adapter.isFirstOnly(false);
+
+
+
 
                     recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
                     recyclerView.setAdapter(adapter);
@@ -179,7 +188,7 @@ public class LiveFragment extends Fragment implements OnBannerClickListener, Swi
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(getContext(), "获取数据失败", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "onError: 网络错误！");
+                Logger.e("网络错误");
 
                 swipe.setRefreshing(false);
             }
@@ -188,6 +197,7 @@ public class LiveFragment extends Fragment implements OnBannerClickListener, Swi
     }
 
     private void addBanner(List<LiveBannerBean> listurl) {
+
         header = LayoutInflater.from(getContext()).inflate(R.layout.banner_recyclerview, null);
         banner = (Banner) header.findViewById(R.id.banner);
         banner.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, MyApp.heightPixels / 6));
@@ -202,7 +212,7 @@ public class LiveFragment extends Fragment implements OnBannerClickListener, Swi
         LiveHeader.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         adapter.addHeaderView(LiveHeader);
 
-        banner.setOnBannerClickListener(this);
+        banner.setOnBannerListener(this);
     }
 
 
@@ -212,23 +222,6 @@ public class LiveFragment extends Fragment implements OnBannerClickListener, Swi
 
 
     /**
-     * Banner点击事件
-     *
-     * @param position
-     */
-    @Override
-    public void OnBannerClick(int position) {
-        Intent intent = new Intent(getContext(), WebViewActivity.class);
-        LiveBannerBean bannerBean = beannerList.get(position - 1);
-        intent.putExtra("title", bannerBean.getRemark());
-        intent.putExtra("url", bannerBean.getLink());
-//        Bundle bundle = new Bundle();
-//        bundle.putSerializable("bannerLiveData", bannerBean);
-//        intent.putExtras(bundle);
-        startActivity(intent);
-    }
-
-    /**
      * 下拉刷新
      */
     @Override
@@ -236,5 +229,17 @@ public class LiveFragment extends Fragment implements OnBannerClickListener, Swi
         //重新获取数据
         adapter = null;
         initDataAll();
+    }
+
+    @Override
+    public void OnBannerClick(int position) {
+        Intent intent = new Intent(getContext(), WebViewActivity.class);
+        LiveBannerBean bannerBean = beannerList.get(position);
+        intent.putExtra("title", bannerBean.getRemark());
+        intent.putExtra("url", bannerBean.getLink());
+//        Bundle bundle = new Bundle();
+//        bundle.putSerializable("bannerLiveData", bannerBean);
+//        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

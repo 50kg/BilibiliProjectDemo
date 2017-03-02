@@ -7,7 +7,7 @@ import java.util.List;
  * Created by sanji on 2017/2/21.
  */
 
-public class PanderGameBean implements Serializable {
+public class PandaGameBean implements Serializable {
 
     /**
      * errno : 0

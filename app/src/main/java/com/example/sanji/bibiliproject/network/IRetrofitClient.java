@@ -1,7 +1,7 @@
 package com.example.sanji.bibiliproject.network;
 
-import com.example.sanji.bibiliproject.bean.PanderGameBean;
-import com.example.sanji.bibiliproject.bean.PanderGameListBean;
+import com.example.sanji.bibiliproject.bean.PandaGameBean;
+import com.example.sanji.bibiliproject.bean.PandaGameListBean;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -26,15 +26,15 @@ public interface IRetrofitClient {
 
     /*熊猫-game*/
     @GET("index.php")
-    Call<PanderGameBean> getPaderGame(@Query("method") String method,
-                                      @Query("type") String type);
+    Call<PandaGameBean> getPaderGame(@Query("method") String method,
+                                     @Query("type") String type);
 
     /*熊猫-gameList*/
 //    http://api.m.panda.tv/ajax_get_live_list_by_cate?cate=lol&pageno=1&pagenum=10
     @GET("ajax_get_live_list_by_cate")
-    Call<PanderGameListBean> getPaderGameList(@Query("cate") String cate,
-                                              @Query("pageno") int pageno,
-                                              @Query("pagenum") int pagenum);
+    Call<PandaGameListBean> getPadaGameList(@Query("cate") String cate,
+                                            @Query("pageno") int pageno,
+                                            @Query("pagenum") int pagenum);
 
 
 }
