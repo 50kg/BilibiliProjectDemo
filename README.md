@@ -7,6 +7,7 @@
 - 使用DrawerLayout+NavigationView侧滑显示
 - 适配API19~24沉浸式状态栏，对国产ROM轻度适配，对DrawerLayout侧滑栏进行了优化
 - 使用CoordinatorLayout/CpllapsingToolbarTayoutUI响应
+- 适配边缘滑动返回上级
 - 网络请求使用retrofit
 - 使用RecyclerView，通过GSON解析生成javabean，使用解耦式多布局适配器进行填充数据，实现了上拉加载，下拉刷新，Item加载动画等
 - 使用广播进行WIFI/数据判断进行本地缓存策略
