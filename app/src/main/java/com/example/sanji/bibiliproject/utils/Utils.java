@@ -36,4 +36,23 @@ public class Utils {
         }
         toast.show();
     }
+
+    /**
+     * 传入总条数，显示总页数
+     * @param totalPage 总条数
+     * @param pageNum 每页显示几条
+     * @return 总页数
+     */
+    public static int getTotalRecord(int totalPage, int pageNum) {
+        int totalRecord = 1;
+        //总页数
+        if (totalPage >= pageNum) {
+            if (totalPage % pageNum == 0) {
+                totalRecord = totalPage / pageNum;
+            } else {
+                totalRecord = totalPage / pageNum + 1;
+            }
+        }
+        return totalRecord;
+    }
 }
