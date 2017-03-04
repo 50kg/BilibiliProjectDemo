@@ -58,12 +58,12 @@ public class IndexFragment extends Fragment {
         titles = getResources().getStringArray(R.array.indexTabLayout);
 
         //Fragment
-        fragmentList.add(new LiveFragment());
-        fragmentList.add(new RecommendFragment());
-        fragmentList.add(new ZhuiFanFragment());
-        fragmentList.add(new PandaGameFragment());
-        fragmentList.add(new GuanZhuFragment());
-        fragmentList.add(new FaXianFragment());
+        fragmentList.add(LiveFragment.getInstance());
+        fragmentList.add(RecommendFragment.getInstance());
+        fragmentList.add(ZhuiFanFragment.getInstance());
+        fragmentList.add(PandaGameFragment.getInstance());
+        fragmentList.add(GuanZhuFragment.getInstance());
+        fragmentList.add(FaXianFragment.getInstance());
     }
 
 }

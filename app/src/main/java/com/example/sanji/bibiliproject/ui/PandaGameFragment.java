@@ -122,8 +122,6 @@ public class PandaGameFragment extends Fragment implements SwipeRefreshLayout.On
                     //全部执行完毕后关闭刷新动画
                     swipe.setRefreshing(false);
                 }
-
-
             }
 
             @Override
@@ -139,5 +137,14 @@ public class PandaGameFragment extends Fragment implements SwipeRefreshLayout.On
     @Override
     public void onRefresh() {
         getData();
+    }
+
+    private static PandaGameFragment pandaGameFragment;
+
+    public static PandaGameFragment getInstance() {
+        if (pandaGameFragment == null) {
+            pandaGameFragment = new PandaGameFragment();
+        }
+        return pandaGameFragment;
     }
 }

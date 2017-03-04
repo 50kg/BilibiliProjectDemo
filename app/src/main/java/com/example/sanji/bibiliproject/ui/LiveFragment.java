@@ -33,6 +33,7 @@ import com.youth.banner.listener.OnBannerListener;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,36 +46,92 @@ import retrofit2.Response;
 /**
  * 直播Fragment
  */
-public class LiveFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, OnBannerListener {
+public class LiveFragment extends Fragment {
 
-    private static final String TAG = "LiveFragment";
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.swipe)
     SwipeRefreshLayout swipe;
-    private View header;
     private Banner banner;
     private LiveMultipleQuickAdapter adapter;
-    //banner所有的数据
-    private List<LiveBannerBean> beannerList;
+    private List<LiveBannerBean> beannerList;//banner所以数据
+    private List<LiveContnetBean> title_contentList;//标题+正文所有数据
     private IRetrofitClient retrofitClient;
+    private boolean isRefresh = false;   // 判断是否正在下拉刷新
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_live, container, false);
         ButterKnife.bind(this, view);
+        initView();
+
+        //初始化Recycler
+        initRecycler();
+        //添加头部
+        addBanner();
+
+        addListener();
+        return view;
+    }
+
+    private void initView() {
         //获取retrofitClient
         retrofitClient = RequestManager.getInstance().getBilibiliLiveClient();
+        swipe.setColorSchemeResources(R.color.colorAccent);//下拉刷新颜色
+        swipe.post(new Runnable() {
+            @Override
+            public void run() {
+                swipe.setRefreshing(true);
+                isRefresh = true;
+                getData();//异步获取数据
+            }
+        });
+    }
 
-        initSwipe();
-        //填充数据
-        getData();
+    private void addListener() {
+        //recycleritem的点击事件
+        recyclerView.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+                switch (view.getId()) {
+                    case R.id.contnet_item_main:
+                        LiveContnetBean item = (LiveContnetBean) adapter.getItem(position);
+                        Toast.makeText(getContext(), "你点击了" + item.getTitle(), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getContext(), PlayerInfoActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("content", item);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                        break;
+                }
 
+            }
+        });
 
-        return view;
+        banner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                Intent intent = new Intent(getContext(), WebViewActivity.class);
+                LiveBannerBean bannerBean = beannerList.get(position);
+                intent.putExtra("title", bannerBean.getRemark());
+                intent.putExtra("url", bannerBean.getLink());
+                startActivity(intent);
+            }
+        });
+
+        //下拉刷新
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (!isRefresh) {
+                    swipe.setRefreshing(true);
+                    isRefresh = true;
+                    getData();
+                }
+            }
+        });
     }
 
     @Override
@@ -86,29 +143,36 @@ public class LiveFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
     }
 
-    private void initSwipe() {
-        swipe.setColorSchemeResources(R.color.colorAccent);//下拉刷新颜色
-        swipe.setOnRefreshListener(this);
-        //建立子线程开始加载刷新动画
-        swipe.post(new Runnable() {
+    private void initRecycler() {
+        title_contentList = new ArrayList<>();
+        adapter = new LiveMultipleQuickAdapter(title_contentList);
+                    /* 关键内容：通过 setSpanSizeLookup 来告诉布局，你的 item 占几个横向单位，
+                    如果你横向有 5 个单位，而你返回当前 item 占用 5 个单位，那么它就会看起来单独占用一行 */
+        adapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
             @Override
-            public void run() {
-                swipe.setRefreshing(true);
+            public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
+                if (title_contentList.get(position).getItemType() == 2) {
+                    //是网格
+                    return 1;
+                }
+                return 2;
             }
         });
+
+
+        //动画
+        adapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
+        adapter.isFirstOnly(false);
+
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        recyclerView.setAdapter(adapter);
+
     }
 
-
     private void getData() {
-
-
         //参数
         Call<ResponseBody> call = retrofitClient.getLiveInfo("android", "android", "xxhdpi");
         call.enqueue(new Callback<ResponseBody>() {
-
-
-            private List<LiveContnetBean> title_contentList;
-
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
@@ -125,54 +189,17 @@ public class LiveFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         e.printStackTrace();
                     }
 
-                    adapter = new LiveMultipleQuickAdapter(title_contentList);
-
-                    /* 关键内容：通过 setSpanSizeLookup 来告诉布局，你的 item 占几个横向单位，
-                    如果你横向有 5 个单位，而你返回当前 item 占用 5 个单位，那么它就会看起来单独占用一行 */
-                    adapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
-                        @Override
-                        public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
-                            if (title_contentList.get(position).getItemType() == 2) {
-                                //是网格
-                                return 1;
-                            }
-                            return 2;
-                        }
-                    });
+                    //是否正在刷新
+                    if (isRefresh) {
+                        //更新正文
+                        adapter.setNewData(title_contentList);
+                        isRefresh = false;
+                        swipe.setRefreshing(false);
+                        //更新banner数据
+                        banner.update(beannerList);
+                    }
 
 
-                    //动画
-                    adapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
-                    adapter.isFirstOnly(false);
-
-
-                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                    recyclerView.setAdapter(adapter);
-
-                    //添加头部
-                    addBanner(beannerList);
-
-                    //recycleritem的点击事件
-                    recyclerView.addOnItemTouchListener(new OnItemClickListener() {
-                        @Override
-                        public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-                            switch (view.getId()) {
-                                case R.id.contnet_item_main:
-                                    LiveContnetBean item = (LiveContnetBean) adapter.getItem(position);
-                                    Toast.makeText(getContext(), "你点击了" + item.getTitle(), Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getContext(), PlayerInfoActivity.class);
-                                    Bundle bundle = new Bundle();
-                                    bundle.putSerializable("content", item);
-                                    intent.putExtras(bundle);
-                                    startActivity(intent);
-                                    break;
-                            }
-
-                        }
-                    });
-
-                    //全部执行完毕后关闭刷新动画
-                    swipe.setRefreshing(false);
                 }
             }
 
@@ -188,12 +215,12 @@ public class LiveFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     }
 
-    private void addBanner(List<LiveBannerBean> listurl) {
-
-        header = LayoutInflater.from(getContext()).inflate(R.layout.banner_recyclerview, null);
+    private void addBanner() {
+        beannerList = new ArrayList<>();
+        View header = LayoutInflater.from(getContext()).inflate(R.layout.banner_recyclerview, null);
         banner = (Banner) header.findViewById(R.id.banner);
         banner.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, MyApp.heightPixels / 6));
-        banner.setImages(listurl)
+        banner.setImages(beannerList)
                 .setImageLoader(new BannerLiveLoader())
                 .setIndicatorGravity(BannerConfig.RIGHT)
                 .setBannerAnimation(Transformer.DepthPage)
@@ -204,34 +231,18 @@ public class LiveFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         LiveHeader.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         adapter.addHeaderView(LiveHeader);
 
-        banner.setOnBannerListener(this);
+
     }
 
 
-    public LiveFragment() {
-        // Required empty public constructor
+    private static LiveFragment liveFragment;
+
+    public static LiveFragment getInstance() {
+        if (liveFragment == null) {
+            liveFragment = new LiveFragment();
+        }
+        return liveFragment;
     }
 
 
-    /**
-     * 下拉刷新
-     */
-    @Override
-    public void onRefresh() {
-        //重新获取数据
-        adapter = null;
-        getData();
-    }
-
-    @Override
-    public void OnBannerClick(int position) {
-        Intent intent = new Intent(getContext(), WebViewActivity.class);
-        LiveBannerBean bannerBean = beannerList.get(position);
-        intent.putExtra("title", bannerBean.getRemark());
-        intent.putExtra("url", bannerBean.getLink());
-//        Bundle bundle = new Bundle();
-//        bundle.putSerializable("bannerLiveData", bannerBean);
-//        intent.putExtras(bundle);
-        startActivity(intent);
-    }
 }

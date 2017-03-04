@@ -136,4 +136,13 @@ public class RecommendFragment extends Fragment implements OnBannerListener {
 //        intent.putExtras(bundle);
         startActivity(intent);
     }
+
+    private static RecommendFragment recommendFragment;
+
+    public static RecommendFragment getInstance() {
+        if (recommendFragment == null) {
+            recommendFragment = new RecommendFragment();
+        }
+        return recommendFragment;
+    }
 }

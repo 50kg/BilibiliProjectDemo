@@ -44,4 +44,13 @@ public class FaXianFragment extends Fragment {
         int a[] = {1};
         Toast.makeText(getContext(), a[1], Toast.LENGTH_SHORT).show();
     }
+
+    private static FaXianFragment faXianFragment;
+
+    public static FaXianFragment getInstance() {
+        if (faXianFragment == null) {
+            faXianFragment = new FaXianFragment();
+        }
+        return faXianFragment;
+    }
 }

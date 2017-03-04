@@ -60,6 +60,16 @@ public class PandaGameListActivity extends BaseActivity implements SwipeRefreshL
         retrofitClient = RequestManager.getInstance().getPandaClient();//获取retrofitClient
         initToolbar();//toolBar
         initSwipe();//初始化下拉刷新操作
+
+        swipe.post(new Runnable() {
+            @Override
+            public void run() {
+                swipe.setRefreshing(true);
+                isRefresh = true;
+                getData();//在这里执行获取数据的方法
+            }
+        });
+
         initRecycler();
         initListener();
 
@@ -89,14 +99,6 @@ public class PandaGameListActivity extends BaseActivity implements SwipeRefreshL
             }
         });
 
-        swipe.post(new Runnable() {
-            @Override
-            public void run() {
-                swipe.setRefreshing(true);
-                isRefresh = true;
-                getData();//在这里执行获取数据的方法
-            }
-        });
     }
 
     private void initRecycler() {
