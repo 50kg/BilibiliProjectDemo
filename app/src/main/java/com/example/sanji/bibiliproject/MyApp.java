@@ -5,6 +5,8 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 
 import com.example.sanji.bibiliproject.ui.MainActivity;
+import com.orhanobut.logger.LogLevel;
+import com.orhanobut.logger.Logger;
 import com.zxy.recovery.core.Recovery;
 
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackManager;
@@ -40,6 +42,9 @@ public class MyApp extends Application {
 
         //滑动返回 必须在 Application 的 onCreate 方法中执行 BGASwipeBackManager.getInstance().init(this) 来初始化滑动返回
         BGASwipeBackManager.getInstance().init(this);
+
+
+        Logger.init("sanji").logLevel(LogLevel.FULL);// 默认LogLevel.FULL 打开日志
 
     }
 

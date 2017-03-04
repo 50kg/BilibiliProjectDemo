@@ -6,7 +6,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -16,179 +15,182 @@ import com.example.sanji.bibiliproject.R;
 import com.example.sanji.bibiliproject.adapter.PandaGmaeListQuickAdapter;
 import com.example.sanji.bibiliproject.bean.PandaGameBean;
 import com.example.sanji.bibiliproject.bean.PandaGameListBean;
-import com.example.sanji.bibiliproject.network.BaseUrl;
 import com.example.sanji.bibiliproject.network.IRetrofitClient;
+import com.example.sanji.bibiliproject.network.RequestManager;
+import com.orhanobut.logger.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PandaGameListActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    @InjectView(R.id.include_toolbar)
+    @BindView(R.id.include_toolbar)
     Toolbar include_toolbar;
-    @InjectView(R.id.game_list_recyclerview)
+    @BindView(R.id.game_list_recyclerview)
     RecyclerView recyclerview;
-    @InjectView(R.id.game_list_swipe)
+    @BindView(R.id.game_list_swipe)
     SwipeRefreshLayout swipe;
     private PandaGameBean.DataBean data;
     private List<PandaGameListBean.DataBean.ItemsBean> items;
-    private boolean loadMoreFalg = true;
 
+    private boolean isLoadMore = false;  // 判断是否正在加载更多
+    private boolean isRefresh = false;   // 判断是否正在下拉刷新
+
+    //每页显示数据
+    private int pagenum = 10;
     //当前页
     private int page = 1;
     //总页数
     private int total = 0;
+    private PandaGmaeListQuickAdapter adapter;
+    private IRetrofitClient retrofitClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_panda_game_list);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         data = (PandaGameBean.DataBean) getIntent().getSerializableExtra("data");
-
-        setSupportActionBar(include_toolbar);
-        getSupportActionBar().setTitle(data.getCname());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//设置返回键可用
-        initSwipe();
-        initData();
+        retrofitClient = RequestManager.getInstance().getPandaClient();//获取retrofitClient
+        initToolbar();//toolBar
+        initSwipe();//初始化下拉刷新操作
+        initRecycler();
+        initListener();
 
 
     }
 
-    /**
-     * 分页加载写的不好，请勿效仿，后期会修改
-     */
-    private void initData() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BaseUrl.BASE_URL_PANDA_GAME)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        IRetrofitClient retrofitClient = retrofit.create(IRetrofitClient.class);
+    private void initListener() {
+        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                Logger.d(isLoadMore + "" + isRefresh);
+                if (!isRefresh && !isLoadMore) {
+                    isLoadMore = true;
+                    page++;
+                    getData();
+                }
 
+            }
+        });
+
+        recyclerview.addOnItemTouchListener(new OnItemChildClickListener() {
+            @Override
+            public void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                PandaGameListBean.DataBean.ItemsBean item = (PandaGameListBean.DataBean.ItemsBean) adapter.getItem(position);
+                Toast.makeText(PandaGameListActivity.this, item.getName(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        swipe.post(new Runnable() {
+            @Override
+            public void run() {
+                swipe.setRefreshing(true);
+                isRefresh = true;
+                getData();//在这里执行获取数据的方法
+            }
+        });
+    }
+
+    private void initRecycler() {
+        items = new ArrayList<>();
+        adapter = new PandaGmaeListQuickAdapter(R.layout.item_pander_game_list, items);//加载空的items
+        recyclerview.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+        recyclerview.setAdapter(adapter);
+        //动画
+        adapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
+
+        View LiveHeader = LayoutInflater.from(getApplicationContext()).inflate(R.layout.recycler_empty, null);
+        adapter.setEmptyView(LiveHeader);
+    }
+
+    private void initToolbar() {
+        setSupportActionBar(include_toolbar);
+        getSupportActionBar().setTitle(data.getCname());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//设置返回键可用
+    }
+
+    private void getData() {
         //参数
-        Call<PandaGameListBean> call = retrofitClient.getPadaGameList(data.getEname(), page, 10);
+
+        Call<PandaGameListBean> call = retrofitClient.getPadaGameList(data.getEname(), page, pagenum);
         call.enqueue(new Callback<PandaGameListBean>() {
             @Override
             public void onResponse(Call<PandaGameListBean> call, Response<PandaGameListBean> response) {
-
                 if (response.isSuccessful()) {
                     PandaGameListBean.DataBean data = response.body().getData();
-                    items = data.getItems();
-                    total = Integer.valueOf(data.getTotal());
-                    if (total % 10 != 0) {
-                        total = total / 10 + 1;
-                    } else {
-                        total = total / 10;
+                    adapter.addData(data.getItems());
+
+
+                    if (isRefresh) {
+                        //全部执行完毕后关闭刷新动画
+                        swipe.setRefreshing(false);
+                        adapter.setNewData(data.getItems());
+                        isRefresh = false;
                     }
-                    final PandaGmaeListQuickAdapter adapter = new PandaGmaeListQuickAdapter(R.layout.item_pander_game_list, items);
-                    recyclerview.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
-                    recyclerview.setAdapter(adapter);
-                    //动画
-                    adapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
 
-                    View LiveHeader = LayoutInflater.from(getApplicationContext()).inflate(R.layout.recycler_empty, null);
-                    adapter.setEmptyView(LiveHeader);
-                    adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-                        @Override
-                        public void onLoadMoreRequested() {
-                            recyclerview.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (page > total) {
-                                        adapter.loadMoreEnd();
-                                    } else {
-                                        //还有数据
-                                        if (loadMoreFalg) {
-                                            //加载成功
-                                            page++;
-
-                                            getMoreData();
-                                            adapter.addData(items);
-                                            adapter.loadMoreComplete();
-                                        } else {
-                                            adapter.loadMoreFail();
-                                        }
-
-                                    }
-
-                                }
-                            }, 1500);
+                    //当前页数
+                    total = Integer.valueOf(data.getTotal());
+                    if (total >= 10) {
+                        if (total % 2 != 0) {
+                            total = total / 10 + 1;
+                        } else {
+                            total = total / 10;
                         }
-                    });
+                    }
 
-                    recyclerview.addOnItemTouchListener(new OnItemChildClickListener() {
-                        @Override
-                        public void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-//                            Toast.makeText(PandaGameListActivity.this, position+"", Toast.LENGTH_SHORT).show();
-//                            Toast.makeText(getApplicationContext(), "你点击了" + items.get(position).getName(), Toast.LENGTH_SHORT).show();
+                    //上拉加载
+                    if (isLoadMore) {
+                        //判断是否是最后一页
+                        if (page == total) {
+                            isLoadMore = false;
+                            adapter.loadMoreEnd();
+                        } else {
+                            adapter.addData(data.getItems());
+                            adapter.notifyDataSetChanged();
+                            isLoadMore = false;
+                            adapter.loadMoreComplete();
                         }
-                    });
+                    }
 
-
-                    //全部执行完毕后关闭刷新动画
-                    swipe.setRefreshing(false);
                 }
             }
 
             @Override
             public void onFailure(Call<PandaGameListBean> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "数据获取失败！", Toast.LENGTH_SHORT).show();
+                //加载错误
+                adapter.loadMoreFail();
+                isLoadMore = false;
+                swipe.setRefreshing(false);
+                isRefresh = false;
+
             }
         });
     }
 
-    public void getMoreData() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BaseUrl.BASE_URL_PANDA_GAME)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        IRetrofitClient retrofitClient = retrofit.create(IRetrofitClient.class);
-
-        //参数
-        Call<PandaGameListBean> call = retrofitClient.getPadaGameList(data.getEname(), page, 10);
-        call.enqueue(new Callback<PandaGameListBean>() {
-            @Override
-            public void onResponse(Call<PandaGameListBean> call, Response<PandaGameListBean> response) {
-                if (response.isSuccessful()) {
-                    loadMoreFalg = true;
-                    PandaGameListBean.DataBean data = response.body().getData();
-                    items = data.getItems();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PandaGameListBean> call, Throwable t) {
-                loadMoreFalg = false;
-            }
-        });
-    }
 
     private void initSwipe() {
         swipe.setColorSchemeResources(R.color.colorAccent);//下拉刷新颜色
-        //下拉刷新页数清0
-        page = 1;
         swipe.setOnRefreshListener(this);
-        //建立子线程开始加载刷新动画
-        swipe.post(new Runnable() {
-            @Override
-            public void run() {
-                swipe.setRefreshing(true);
-            }
-        });
     }
 
 
     @Override
     public void onRefresh() {
-        initData();
+        //下拉刷新
+        if (!isRefresh && !isLoadMore) {
+            page = 1;
+            swipe.setRefreshing(true);
+            isRefresh = true;
+            getData();
+        }
     }
-
-
 }

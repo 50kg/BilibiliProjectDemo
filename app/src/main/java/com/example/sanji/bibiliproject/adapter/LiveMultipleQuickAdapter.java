@@ -8,7 +8,7 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.sanji.bibiliproject.R;
 import com.example.sanji.bibiliproject.bean.LiveContnetBean;
-import com.example.sanji.bibiliproject.utils.NumberUtil;
+import com.example.sanji.bibiliproject.utils.Utils;
 
 import java.util.List;
 
@@ -36,11 +36,9 @@ public class LiveMultipleQuickAdapter extends BaseMultiItemQuickAdapter<LiveCont
             case LiveContnetBean.TITLE:
                 helper.setText(R.id.titleBig, item.getTitleName());
                 Glide.with(mContext).load(item.getTitleSrc()).crossFade().into((ImageView) helper.getView(R.id.titleIcon));
-                helper.setText(R.id.count, NumberUtil.getNumWan(item.getCount()));
+                helper.setText(R.id.count, Utils.getNumWan(item.getCount()));
                 break;
             case LiveContnetBean.CONTNET:
-                //点击事件
-                helper.addOnClickListener(R.id.contnet_item_main);
                 helper.setText(R.id.tv_userName, item.getContentName());
                 Glide.with(mContext).load(item.getContentSrc())
                         .crossFade()//淡入

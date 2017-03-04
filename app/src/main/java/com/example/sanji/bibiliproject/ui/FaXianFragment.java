@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import com.example.sanji.bibiliproject.R;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -21,7 +21,7 @@ import butterknife.OnClick;
 public class FaXianFragment extends Fragment {
 
 
-    @InjectView(R.id.btn_debug)
+    @BindView(R.id.btn_debug)
     Button btnDebug;
 
     public FaXianFragment() {
@@ -34,15 +34,10 @@ public class FaXianFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fa_xian, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         return view;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.reset(this);
-    }
 
     @OnClick(R.id.btn_debug)
     public void onClick() {

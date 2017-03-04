@@ -14,20 +14,19 @@ import com.dl7.player.media.IjkPlayerView;
 import com.example.sanji.bibiliproject.R;
 import com.example.sanji.bibiliproject.bean.LiveContnetBean;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import master.flame.danmaku.danmaku.model.BaseDanmaku;
 
 public class IjkPlayerActivity extends AppCompatActivity {
 
-    @InjectView(R.id.player_view)
+    @BindView(R.id.player_view)
     IjkPlayerView mPlayerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ijk_player);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         LiveContnetBean data = (LiveContnetBean) getIntent().getSerializableExtra("content");
 

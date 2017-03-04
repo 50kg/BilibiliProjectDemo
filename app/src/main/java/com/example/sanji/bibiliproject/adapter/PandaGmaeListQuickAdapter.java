@@ -8,7 +8,7 @@ import com.chad.library.adapter.base.BaseItemDraggableAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.sanji.bibiliproject.R;
 import com.example.sanji.bibiliproject.bean.PandaGameListBean;
-import com.example.sanji.bibiliproject.utils.NumberUtil;
+import com.example.sanji.bibiliproject.utils.Utils;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class PandaGmaeListQuickAdapter extends BaseItemDraggableAdapter<PandaGam
                 .error(R.drawable.img_tips_error_banner_tv)//错误
                 .into((ImageView) holder.getView(R.id.pander_game_list_img));
         holder.setText(R.id.pander_game_list_tv_name, item.getUserinfo().getNickName());
-        holder.setText(R.id.pander_game_list_tv_count, NumberUtil.getNumWan(Integer.valueOf(item.getPerson_num())));
+        holder.setText(R.id.pander_game_list_tv_count, Utils.getNumWan(Integer.valueOf(item.getPerson_num())));
         holder.addOnClickListener(R.id.item_pander_game_list);
     }
 

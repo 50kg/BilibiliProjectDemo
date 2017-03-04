@@ -9,10 +9,8 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -24,26 +22,26 @@ import com.example.sanji.bibiliproject.R;
 import com.example.sanji.bibiliproject.bean.CollapsingToolbarLayoutState;
 import com.example.sanji.bibiliproject.bean.LiveContnetBean;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class PlayerInfoActivity extends BaseActivity {
 
-    @InjectView(R.id.playButton)
+    @BindView(R.id.playButton)
     ButtonBarLayout playButton;
-    @InjectView(R.id.toolbar_layout)
+    @BindView(R.id.toolbar_layout)
     CollapsingToolbarLayout collapsingToolbarLayout;
-    @InjectView(R.id.toolbar_play)
+    @BindView(R.id.toolbar_play)
     Toolbar toolbar_play;
-    @InjectView(R.id.app_bar)
+    @BindView(R.id.app_bar)
     AppBarLayout appBar;
-    @InjectView(R.id.player_fragment)
+    @BindView(R.id.player_fragment)
     FrameLayout playerFragment;
-    @InjectView(R.id.fab)
+    @BindView(R.id.fab)
     FloatingActionButton fab;
-    @InjectView(R.id.coordinatorLayout)
+    @BindView(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
-    @InjectView(R.id.imageview)
+    @BindView(R.id.imageview)
     ImageView imageview;
     private CollapsingToolbarLayoutState state;
     private LiveContnetBean data;
@@ -56,7 +54,7 @@ public class PlayerInfoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_info);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         data = (LiveContnetBean) getIntent().getSerializableExtra("content");
 

@@ -15,8 +15,8 @@ import com.example.sanji.bibiliproject.adapter.FragmentTabLayoutAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,9 +24,9 @@ import butterknife.InjectView;
 public class IndexFragment extends Fragment {
 
 
-    @InjectView(R.id.tablayout)
+    @BindView(R.id.tablayout)
     TabLayout tablayout;
-    @InjectView(R.id.viewpager)
+    @BindView(R.id.viewpager)
     ViewPager viewpager;
 
 
@@ -42,7 +42,7 @@ public class IndexFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_index, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
 
         initData();
@@ -66,9 +66,4 @@ public class IndexFragment extends Fragment {
         fragmentList.add(new FaXianFragment());
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.reset(this);
-    }
 }

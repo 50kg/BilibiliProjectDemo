@@ -2,13 +2,11 @@ package com.example.sanji.bibiliproject.ui;
 
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,23 +14,20 @@ import android.widget.AbsListView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.example.sanji.bibiliproject.MyApp;
 import com.example.sanji.bibiliproject.R;
 import com.example.sanji.bibiliproject.adapter.LiveMultipleQuickAdapter;
 import com.example.sanji.bibiliproject.bean.LiveBannerBean;
 import com.example.sanji.bibiliproject.bean.LiveContnetBean;
-import com.example.sanji.bibiliproject.network.BaseUrl;
 import com.example.sanji.bibiliproject.network.IRetrofitClient;
-import com.example.sanji.bibiliproject.utils.DataBeanToJsonUtil;
+import com.example.sanji.bibiliproject.network.RequestManager;
 import com.example.sanji.bibiliproject.utils.BannerLiveLoader;
-import com.orhanobut.logger.LogAdapter;
-import com.orhanobut.logger.LogLevel;
+import com.example.sanji.bibiliproject.utils.DataBeanToJsonUtil;
 import com.orhanobut.logger.Logger;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
-import com.youth.banner.listener.OnBannerClickListener;
 import com.youth.banner.listener.OnBannerListener;
 
 import org.json.JSONException;
@@ -40,13 +35,12 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 /**
  * 直播Fragment
@@ -54,14 +48,16 @@ import retrofit2.Retrofit;
 public class LiveFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, OnBannerListener {
 
     private static final String TAG = "LiveFragment";
-    @InjectView(R.id.recyclerView)
+    @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.swipe)
     SwipeRefreshLayout swipe;
     private View header;
     private Banner banner;
     private LiveMultipleQuickAdapter adapter;
     //banner所有的数据
     private List<LiveBannerBean> beannerList;
+    private IRetrofitClient retrofitClient;
 
 
     @Override
@@ -69,13 +65,15 @@ public class LiveFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                              final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_live, container, false);
-        swipe = (SwipeRefreshLayout) view.findViewById(R.id.swipe);
+        ButterKnife.bind(this, view);
+        //获取retrofitClient
+        retrofitClient = RequestManager.getInstance().getBilibiliLiveClient();
 
         initSwipe();
         //填充数据
-        initDataAll();
+        getData();
 
-        ButterKnife.inject(this, view);
+
         return view;
     }
 
@@ -86,12 +84,6 @@ public class LiveFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         if (banner != null) {
             banner.stopAutoPlay();
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.reset(this);
     }
 
     private void initSwipe() {
@@ -107,12 +99,8 @@ public class LiveFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
 
-    private void initDataAll() {
+    private void getData() {
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BaseUrl.BASE_URL_LIVE)
-                .build();
-        IRetrofitClient retrofitClient = retrofit.create(IRetrofitClient.class);
 
         //参数
         Call<ResponseBody> call = retrofitClient.getLiveInfo("android", "android", "xxhdpi");
@@ -158,8 +146,6 @@ public class LiveFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     adapter.isFirstOnly(false);
 
 
-
-
                     recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
                     recyclerView.setAdapter(adapter);
 
@@ -167,15 +153,21 @@ public class LiveFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     addBanner(beannerList);
 
                     //recycleritem的点击事件
-                    recyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
+                    recyclerView.addOnItemTouchListener(new OnItemClickListener() {
                         @Override
-                        public void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                            Toast.makeText(getContext(), "你点击了" + title_contentList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getContext(), PlayerInfoActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("content", title_contentList.get(position));
-                            intent.putExtras(bundle);
-                            startActivity(intent);
+                        public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+                            switch (view.getId()) {
+                                case R.id.contnet_item_main:
+                                    LiveContnetBean item = (LiveContnetBean) adapter.getItem(position);
+                                    Toast.makeText(getContext(), "你点击了" + item.getTitle(), Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getContext(), PlayerInfoActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("content", item);
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                    break;
+                            }
+
                         }
                     });
 
@@ -228,7 +220,7 @@ public class LiveFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void onRefresh() {
         //重新获取数据
         adapter = null;
-        initDataAll();
+        getData();
     }
 
     @Override

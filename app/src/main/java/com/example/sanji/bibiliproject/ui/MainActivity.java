@@ -22,29 +22,29 @@ import android.widget.LinearLayout;
 import com.example.sanji.bibiliproject.R;
 import com.orhanobut.logger.Logger;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    @InjectView(R.id.main_toolbar)
+    @BindView(R.id.main_toolbar)
     Toolbar main_toolbar;
-    @InjectView(R.id.nav_view)
+    @BindView(R.id.nav_view)
     NavigationView navigationView;
-    @InjectView(R.id.drawer_layout)
+    @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
-    @InjectView(R.id.content_main)
+    @BindView(R.id.content_main)
     LinearLayout contentMain;
 
     FragmentTransaction transaction;
-    @InjectView(R.id.layout_drawer)
+    @BindView(R.id.layout_drawer)
     LinearLayout layoutDrawer;
 
     boolean flag = false;//切换夜间模式
-    @InjectView(R.id.fab)
+    @BindView(R.id.fab)
     FloatingActionButton fab;
-    @InjectView(R.id.coorLayout)
+    @BindView(R.id.coorLayout)
     CoordinatorLayout coorLayout;
     private ImageView yejian;
     private IndexFragment indexFragment;
@@ -53,7 +53,7 @@ public class MainActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         main_toolbar.setTitle("");
         setSupportActionBar(main_toolbar);
         //去除滚动条

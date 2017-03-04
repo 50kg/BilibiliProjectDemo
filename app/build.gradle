@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.jakewharton.butterknife'
 
 android {
     compileSdkVersion 25
@@ -41,11 +42,11 @@ dependencies {
     compile files('libs/java-json.jar')
     compile 'com.alibaba:fastjson:1.1.56.android'
     /*快速init*/
-    compile 'com.jakewharton:butterknife:5.1.1'
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     /*圆形头像*/
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.android.support:recyclerview-v7:25.1.1'
-    compile 'org.byteam.superadapter:superadapter:3.6.6'
     /*滚动图*/
     compile 'com.youth.banner:banner:1.4.9'
     /*滑动返回*/

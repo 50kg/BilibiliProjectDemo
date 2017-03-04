@@ -1,10 +1,13 @@
 package com.example.sanji.bibiliproject.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.sanji.bibiliproject.R;
+import com.example.sanji.bibiliproject.utils.Utils;
 
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
 
@@ -61,7 +64,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BGASwipe
         return super.onOptionsItemSelected(item);
     }
 
-    //是否支持滑动返回。这里在父类中默认返回 true 来支持滑动返回，如果某个界面不想支持滑动返回则重写该方法返回 false 即可
+    /**
+     * 是否支持滑动返回。这里在父类中默认返回 true 来支持滑动返回，如果某个界面不想支持滑动返回则重写该方法返回 false 即可
+     */
     @Override
     public boolean isSupportSwipeBack() {
         return true;
@@ -90,4 +95,13 @@ public abstract class BaseActivity extends AppCompatActivity implements BGASwipe
     public void onSwipeBackLayoutExecuted() {
         mSwipeBackHelper.swipeBackward();
     }
+
+    /**
+     * Toast
+     */
+    protected void showToast(String msg) {
+        Utils.showToast(this, msg, Toast.LENGTH_SHORT);
+    }
+
+
 }
