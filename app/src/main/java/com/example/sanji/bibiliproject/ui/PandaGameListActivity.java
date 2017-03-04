@@ -17,6 +17,7 @@ import com.example.sanji.bibiliproject.bean.PandaGameBean;
 import com.example.sanji.bibiliproject.bean.PandaGameListBean;
 import com.example.sanji.bibiliproject.network.IRetrofitClient;
 import com.example.sanji.bibiliproject.network.RequestManager;
+import com.example.sanji.bibiliproject.utils.Utils;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -43,11 +44,13 @@ public class PandaGameListActivity extends BaseActivity implements SwipeRefreshL
     private boolean isRefresh = false;   // 判断是否正在下拉刷新
 
     //每页显示数据
-    private int pagenum = 10;
+    private int pageNum = 10;
     //当前页
     private int page = 1;
+    //总条数
+    private int totalPage = 0;
     //总页数
-    private int total = 0;
+    private int totalRecord = 0;
     private PandaGmaeListQuickAdapter adapter;
     private IRetrofitClient retrofitClient;
 
@@ -122,7 +125,7 @@ public class PandaGameListActivity extends BaseActivity implements SwipeRefreshL
     private void getData() {
         //参数
 
-        Call<PandaGameListBean> call = retrofitClient.getPadaGameList(data.getEname(), page, pagenum);
+        Call<PandaGameListBean> call = retrofitClient.getPadaGameList(data.getEname(), page, pageNum);
         call.enqueue(new Callback<PandaGameListBean>() {
             @Override
             public void onResponse(Call<PandaGameListBean> call, Response<PandaGameListBean> response) {
@@ -138,20 +141,14 @@ public class PandaGameListActivity extends BaseActivity implements SwipeRefreshL
                         isRefresh = false;
                     }
 
-                    //当前页数
-                    total = Integer.valueOf(data.getTotal());
-                    if (total >= 10) {
-                        if (total % 2 != 0) {
-                            total = total / 10 + 1;
-                        } else {
-                            total = total / 10;
-                        }
-                    }
-
+                    //总条数
+                    totalPage = Integer.valueOf(data.getTotal());
+                    //总页数
+                    totalRecord = Utils.getTotalRecord(totalPage, pageNum);
                     //上拉加载
                     if (isLoadMore) {
                         //判断是否是最后一页
-                        if (page == total) {
+                        if (page == totalRecord) {
                             isLoadMore = false;
                             adapter.loadMoreEnd();
                         } else {

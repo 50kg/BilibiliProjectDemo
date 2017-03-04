@@ -16,7 +16,7 @@ import cn.bingoogolapple.swipebacklayout.BGASwipeBackManager;
  */
 
 public class MyApp extends Application {
-
+    
     //屏幕高度
     public static int heightPixels;
     //全局context
