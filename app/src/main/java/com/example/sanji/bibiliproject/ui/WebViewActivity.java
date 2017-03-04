@@ -3,21 +3,19 @@ package com.example.sanji.bibiliproject.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.example.sanji.bibiliproject.R;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
 
 public class WebViewActivity extends BaseActivity {
 
-    @InjectView(R.id.myWebView)
+    @BindView(R.id.myWebView)
     WebView mWebView;
-    @InjectView(R.id.include_toolbar)
+    @BindView(R.id.include_toolbar)
     Toolbar include_toolbar;
 
 
@@ -25,7 +23,7 @@ public class WebViewActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         setSupportActionBar(include_toolbar);

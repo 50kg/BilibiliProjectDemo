@@ -16,6 +16,4 @@ public class BaseUrl {
     //http://api.m.panda.tv/index.php?method=category.list&type=game
     public static final String BASE_URL_PANDA_GAME = "http://api.m.panda.tv/";
 
-
-
 }

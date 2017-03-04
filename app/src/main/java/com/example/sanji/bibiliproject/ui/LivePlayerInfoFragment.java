@@ -27,13 +27,8 @@ public class LivePlayerInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_live_player_info, container, false);
-        ButterKnife.inject(this, view);
+
         return view;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.reset(this);
-    }
 }

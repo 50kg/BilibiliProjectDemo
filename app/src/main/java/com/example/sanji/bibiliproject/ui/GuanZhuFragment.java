@@ -26,5 +26,12 @@ public class GuanZhuFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_guan_zhu, container, false);
     }
+    private static GuanZhuFragment guanZhuFragment;
 
+    public static GuanZhuFragment getInstance() {
+        if (guanZhuFragment == null) {
+            guanZhuFragment = new GuanZhuFragment();
+        }
+        return guanZhuFragment;
+    }
 }

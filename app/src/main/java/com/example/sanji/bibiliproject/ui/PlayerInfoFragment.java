@@ -17,6 +17,7 @@ import com.example.sanji.bibiliproject.ui.LivePlayerSayFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
@@ -26,9 +27,9 @@ import butterknife.ButterKnife;
 public class PlayerInfoFragment extends Fragment {
 
 
-    //    @InjectView(R.id.tablayout_player)
+    @BindView(R.id.tablayout_player)
     TabLayout tablayoutPlayer;
-    //    @InjectView(R.id.viewpager_player)
+    @BindView(R.id.viewpager_player)
     ViewPager viewpagerPlayer;
 
     public PlayerInfoFragment() {
@@ -43,14 +44,13 @@ public class PlayerInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_player_live, container, false);
-        tablayoutPlayer = (TabLayout) view.findViewById(R.id.tablayout_player);
-        viewpagerPlayer = (ViewPager) view.findViewById(R.id.viewpager_player);
+        ButterKnife.bind(this, view);
 
         initFragmentData();
         FragmentTabLayoutAdapter adapter = new FragmentTabLayoutAdapter(getChildFragmentManager(), getContext(), fragmentList, titles);
         viewpagerPlayer.setAdapter(adapter);
         tablayoutPlayer.setupWithViewPager(viewpagerPlayer);
-        ButterKnife.inject(this, view);
+
         return view;
     }
 
@@ -64,9 +64,4 @@ public class PlayerInfoFragment extends Fragment {
     }
 
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.reset(this);
-    }
 }

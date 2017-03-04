@@ -12,21 +12,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.example.sanji.bibiliproject.R;
-import com.example.sanji.bibiliproject.adapter.PandaGameAdapter;
+import com.example.sanji.bibiliproject.adapter.PandaGameQuictAdapter;
 import com.example.sanji.bibiliproject.bean.PandaGameBean;
-import com.example.sanji.bibiliproject.network.BaseUrl;
 import com.example.sanji.bibiliproject.network.IRetrofitClient;
+import com.example.sanji.bibiliproject.network.RequestManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,12 +35,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PandaGameFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
 
-    @InjectView(R.id.game_recyclerview)
+    @BindView(R.id.game_recyclerview)
     RecyclerView recyclerview;
-    private SwipeRefreshLayout swipe;
+    @BindView(R.id.pander_gmme_swipe)
+    SwipeRefreshLayout swipe;
+    private IRetrofitClient retrofitClient;
+
+    private boolean isRefresh = false;   // 判断是否正在下拉刷新
+    private List<PandaGameBean.DataBean> data;
+    private PandaGameQuictAdapter adapter;
 
     public PandaGameFragment() {
-        // Required empty public constructor
     }
 
 
@@ -48,35 +54,59 @@ public class PandaGameFragment extends Fragment implements SwipeRefreshLayout.On
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game, container, false);
-        swipe = (SwipeRefreshLayout) view.findViewById(R.id.pander_gmme_swipe);
+        ButterKnife.bind(this, view);
+        retrofitClient = RequestManager.getInstance().getPandaClient();//获取retrofitClient
+
+        //整体流程，先加载空的数据，初始化其他操作，等待加载
+
+        data = new ArrayList<>();
+        //建立子线程开始加载刷新动画
+        swipe.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!isRefresh) {
+                    swipe.setRefreshing(true);
+                    isRefresh = true;
+                    getData();//在这里获取数据
+                }
+            }
+        });
+
         initSwipe();
+        initRecycler();
+        initListener();
 
-        initData();
-
-
-        ButterKnife.inject(this, view);
         return view;
+    }
+
+    private void initListener() {
+        recyclerview.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent(getContext(), PandaGameListActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("data", data.get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void initRecycler() {
+        recyclerview.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        adapter = new PandaGameQuictAdapter(R.layout.item_pander_game, data);
+        recyclerview.setAdapter(adapter);
+        View LiveHeader = LayoutInflater.from(getContext()).inflate(R.layout.recycler_empty, null);
+        adapter.setEmptyView(LiveHeader);
     }
 
     private void initSwipe() {
         swipe.setColorSchemeResources(R.color.colorAccent);//下拉刷新颜色
         swipe.setOnRefreshListener(this);
-        //建立子线程开始加载刷新动画
-        swipe.post(new Runnable() {
-            @Override
-            public void run() {
-                swipe.setRefreshing(true);
-            }
-        });
     }
 
 
-    private void initData() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BaseUrl.BASE_URL_PANDA_GAME)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        IRetrofitClient retrofitClient = retrofit.create(IRetrofitClient.class);
+    private void getData() {
 
         //参数
         Call<PandaGameBean> call = retrofitClient.getPaderGame("category.list", "game");
@@ -84,48 +114,37 @@ public class PandaGameFragment extends Fragment implements SwipeRefreshLayout.On
             @Override
             public void onResponse(Call<PandaGameBean> call, Response<PandaGameBean> response) {
 
-                final List<PandaGameBean.DataBean> data = response.body().getData();
+                data = response.body().getData();
 
-                recyclerview.setLayoutManager(new GridLayoutManager(getContext(), 3));
-                PandaGameAdapter adapter = new PandaGameAdapter(getContext(), data, R.layout.item_pander_game);
-                recyclerview.setAdapter(adapter);
-
-                /**
-                 * 单击事件接口回调
-                 */
-                adapter.setOnItemClickListener(new PandaGameAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-
-                        
-                        Intent intent = new Intent(getContext(), PandaGameListActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("data", data.get(position));
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }
-                });
-
-                //全部执行完毕后关闭刷新动画
-                swipe.setRefreshing(false);
+                if (isRefresh) {
+                    initRecycler();
+                    isRefresh = false;
+                    //全部执行完毕后关闭刷新动画
+                    swipe.setRefreshing(false);
+                }
             }
 
             @Override
             public void onFailure(Call<PandaGameBean> call, Throwable t) {
                 Toast.makeText(getContext(), "数据获取失败！", Toast.LENGTH_SHORT).show();
+                isRefresh = false;
+                swipe.setRefreshing(false);
             }
         });
     }
 
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.reset(this);
+    public void onRefresh() {
+        getData();
     }
 
-    @Override
-    public void onRefresh() {
-        initData();
+    private static PandaGameFragment pandaGameFragment;
+
+    public static PandaGameFragment getInstance() {
+        if (pandaGameFragment == null) {
+            pandaGameFragment = new PandaGameFragment();
+        }
+        return pandaGameFragment;
     }
 }

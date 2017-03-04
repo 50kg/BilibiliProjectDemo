@@ -27,4 +27,12 @@ public class ZhuiFanFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_zhui_fan, container, false);
     }
 
+    private static ZhuiFanFragment zhuiFanFragment;
+
+    public static ZhuiFanFragment getInstance() {
+        if (zhuiFanFragment == null) {
+            zhuiFanFragment = new ZhuiFanFragment();
+        }
+        return zhuiFanFragment;
+    }
 }

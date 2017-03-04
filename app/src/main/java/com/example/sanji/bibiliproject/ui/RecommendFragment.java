@@ -12,28 +12,27 @@ import android.widget.Toast;
 
 import com.example.sanji.bibiliproject.R;
 import com.example.sanji.bibiliproject.bean.RecommendBannerBean;
-import com.example.sanji.bibiliproject.network.BaseUrl;
 import com.example.sanji.bibiliproject.network.IRetrofitClient;
+import com.example.sanji.bibiliproject.network.RequestManager;
 import com.example.sanji.bibiliproject.utils.BannerRecommendLoader;
 import com.example.sanji.bibiliproject.utils.DataBeanToJsonUtil;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
-import com.youth.banner.listener.OnBannerClickListener;
 import com.youth.banner.listener.OnBannerListener;
 
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 /**
  * 推荐Fragment
@@ -42,11 +41,12 @@ public class RecommendFragment extends Fragment implements OnBannerListener {
 
 
     private static final String TAG = "RecommendFragment";
-    @InjectView(R.id.recommend_banner)
+    @BindView(R.id.recommend_banner)
     Banner banner;
 
     //所有banner的数据
-    private List<RecommendBannerBean> beanData;
+    private List<RecommendBannerBean> bannerData;
+    private IRetrofitClient retrofitClient;
 
     public RecommendFragment() {
         // Required empty public constructor
@@ -58,21 +58,28 @@ public class RecommendFragment extends Fragment implements OnBannerListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recommend, container, false);
-        ButterKnife.inject(this, view);
-        initDataAll();
+        ButterKnife.bind(this, view);
+        retrofitClient = RequestManager.getInstance().getBilibiliAppClient();
+
+        bannerData = new ArrayList<>();
+        addBanner();
+        banner.setOnBannerListener(this);
+        getData();
         return view;
     }
 
-    private void initDataAll() {
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BaseUrl.BASE_URL_RECOMMEND)
-                .build();
-        IRetrofitClient client = retrofit.create(IRetrofitClient.class);
+    private void addBanner() {
+        banner.setImages(bannerData)
+                .setImageLoader(new BannerRecommendLoader())
+                .setIndicatorGravity(BannerConfig.RIGHT)
+                .setBannerAnimation(Transformer.DepthPage)
+                .start();
+    }
 
-
+    private void getData() {
         //参数
-        Call<ResponseBody> call = client.getRecommendInfo("434000", "android");
+        Call<ResponseBody> call = retrofitClient.getRecommendInfo("434000", "android");
         call.enqueue(new Callback<ResponseBody>() {
 
             @Override
@@ -81,7 +88,7 @@ public class RecommendFragment extends Fragment implements OnBannerListener {
                 if (response.isSuccessful()) {
                     try {
                         String jsonString = response.body().string();
-                        beanData = DataBeanToJsonUtil.getRecmmendBannerBeanData(jsonString);
+                        bannerData = DataBeanToJsonUtil.getRecmmendBannerBeanData(jsonString);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
@@ -118,30 +125,24 @@ public class RecommendFragment extends Fragment implements OnBannerListener {
         }
     }
 
-    private void addBanner() {
-        banner.setImages(beanData)
-                .setImageLoader(new BannerRecommendLoader())
-                .setIndicatorGravity(BannerConfig.RIGHT)
-                .setBannerAnimation(Transformer.DepthPage)
-                .start();
-        banner.setOnBannerListener(this);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.reset(this);
-    }
-
     @Override
     public void OnBannerClick(int position) {
         Intent intent = new Intent(getContext(), WebViewActivity.class);
-        RecommendBannerBean bannerBean = beanData.get(position - 1);
+        RecommendBannerBean bannerBean = bannerData.get(position - 1);
         intent.putExtra("title", bannerBean.getTitle());
         intent.putExtra("url", bannerBean.getUri());
 //        Bundle bundle = new Bundle();
 //        bundle.putSerializable("bannerRecommendData", bannerBean);
 //        intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    private static RecommendFragment recommendFragment;
+
+    public static RecommendFragment getInstance() {
+        if (recommendFragment == null) {
+            recommendFragment = new RecommendFragment();
+        }
+        return recommendFragment;
     }
 }
