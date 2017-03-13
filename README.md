@@ -1,14 +1,14 @@
-# Bilibili直播播放器
+# Bilibili直播播放器 MVP+Retrofit+RxJava
 - 直播接口使用Blibili客户端/游戏使用熊猫TV
 - 如接口侵权请私信删除
 ---
 # 介绍
-- 该App界面设计使用的是 Material Design，遵循 Google 设计规范
+- 该APP使用MVP框架，Retrofit网络请求，RxJava分发框架
+- 面设计使用的是 Material Design，遵循 Google 设计规范
 - 使用DrawerLayout+NavigationView侧滑显示
 - 适配API19~24沉浸式状态栏，对国产ROM轻度适配，对DrawerLayout侧滑栏进行了优化
 - 使用CoordinatorLayout/CpllapsingToolbarTayoutUI响应
 - 适配边缘滑动返回上级
-- 网络请求使用retrofit
 - 使用RecyclerView，通过GSON解析生成javabean，使用解耦式多布局适配器进行填充数据，实现了上拉加载，下拉刷新，Item加载动画等
 - 使用广播进行WIFI/数据判断进行本地缓存策略
 - 图片使用Glide图片加载器完成
