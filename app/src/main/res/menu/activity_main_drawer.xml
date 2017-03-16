@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group
-        android:id="@+id/nav1"
-        android:checkableBehavior="single">
+    <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_index"
             android:icon="@drawable/ic_nav_index"
@@ -22,9 +20,7 @@
             android:title="离线缓存" />
     </group>
 
-    <group
-        android:id="@+id/nav2"
-        android:checkableBehavior="single">
+    <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_shoucang"
             android:icon="@drawable/ic_nav_star"
@@ -42,9 +38,7 @@
             android:icon="@drawable/ic_nav_qianbao"
             android:title="B站钱包" />
     </group>
-    <group
-        android:id="@+id/nav3"
-        android:checkableBehavior="single">
+    <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_color"
             android:icon="@drawable/ic_nav_color"

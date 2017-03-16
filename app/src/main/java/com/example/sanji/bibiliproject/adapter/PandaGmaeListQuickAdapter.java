@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.sanji.bibiliproject.R;
 import com.example.sanji.bibiliproject.bean.PandaGameListBean;
@@ -16,7 +17,7 @@ import java.util.List;
  * Created by sanji on 2017/2/21.
  */
 
-public class PandaGmaeListQuickAdapter extends BaseItemDraggableAdapter<PandaGameListBean.DataBean.ItemsBean, BaseViewHolder> {
+public class PandaGmaeListQuickAdapter extends BaseQuickAdapter<PandaGameListBean.DataBean.ItemsBean, BaseViewHolder> {
 
 
     public PandaGmaeListQuickAdapter(int layoutResId, List<PandaGameListBean.DataBean.ItemsBean> data) {

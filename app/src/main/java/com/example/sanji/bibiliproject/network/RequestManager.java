@@ -1,5 +1,7 @@
 package com.example.sanji.bibiliproject.network;
 
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -12,7 +14,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RequestManager {
 
     private static RequestManager requestManager;
-
 
     //先走单例模式
     public static RequestManager getInstance() {
@@ -30,6 +31,7 @@ public class RequestManager {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BaseUrl.BASE_URL_PANDA_GAME)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         IRetrofitClient retrofitClient = retrofit.create(IRetrofitClient.class);
         return retrofitClient;
@@ -39,6 +41,7 @@ public class RequestManager {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BaseUrl.BASE_URL_RECOMMEND)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         IRetrofitClient retrofitClient = retrofit.create(IRetrofitClient.class);
         return retrofitClient;
@@ -48,6 +51,7 @@ public class RequestManager {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BaseUrl.BASE_URL_LIVE)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         IRetrofitClient retrofitClient = retrofit.create(IRetrofitClient.class);
         return retrofitClient;
