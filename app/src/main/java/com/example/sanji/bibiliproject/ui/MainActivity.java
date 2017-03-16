@@ -11,16 +11,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.sanji.bibiliproject.R;
-import com.orhanobut.logger.Logger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,20 +33,18 @@ public class MainActivity extends BaseActivity
     NavigationView navigationView;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
-    @BindView(R.id.content_main)
-    LinearLayout contentMain;
-
     FragmentTransaction transaction;
     @BindView(R.id.layout_drawer)
     LinearLayout layoutDrawer;
-
-    boolean flag = false;//切换夜间模式
     @BindView(R.id.fab)
     FloatingActionButton fab;
     @BindView(R.id.coorLayout)
     CoordinatorLayout coorLayout;
+    @BindView(R.id.content_main)
+    FrameLayout contentMain;
     private ImageView yejian;
     private IndexFragment indexFragment;
+    boolean flag = false;//切换夜间模式
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +79,7 @@ public class MainActivity extends BaseActivity
 
     /**
      * 主界面不需要支持滑动返回，重写该方法永久禁用当前界面的滑动返回功能
+     *
      * @return
      */
     @Override
